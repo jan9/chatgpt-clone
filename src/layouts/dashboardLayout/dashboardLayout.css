@@ -1,0 +1,57 @@
+.dashboardLayout {
+  display: flex;
+  gap: 50px;
+  padding-top: 20px;
+  height: 100%;
+
+  .menu {
+    flex: 1;
+  }
+
+  .content {
+    flex: 4;
+    background-color: #12101b;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+  }
+
+  a {
+    padding: 10px;
+    border-radius: 10px;
+
+    &:hover {
+      background-color: #2c2937;
+    }
+  }
+
+  .upgrade {
+    margin-top: auto;
+    display: flex;
+    align-content: center;
+    gap: 10px;
+    font-size: 12px;
+
+    img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .texts {
+      display: flex;
+      flex-direction: column;
+
+      span {
+        &:first-child {
+          font-weight: 600;
+        }
+        &:last-child {
+          color: #888;
+        }
+      }
+    }
+  }
+}
