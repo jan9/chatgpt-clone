@@ -6,6 +6,14 @@ const port = process.env.PORT || 3000;
 
 const app = express();
 
+const databaseConnection = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_CONNECTION_STRING);
+    console.log("Connected to MongoDB");
+  } catch (err) {
+    console.log(err);
+  }
+};
 const imagekit = new ImageKit({
   urlEndpoint: process.env.IMAGE_KIT_ENDPOINT,
   publicKey: process.env.IMAGE_KIT_PUBLIC_KEY,
@@ -36,5 +44,7 @@ app.get("/api/upload", (req, res) => {
 
 // listening for port
 app.listen(port, () => {
+  // mongoose connection to mongoDB
+  connect();
   console.log("Server running on 3000");
 });
