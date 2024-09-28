@@ -1,7 +1,21 @@
 import "./chatList.css";
 import { Link } from "react-router-dom";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 
 const ChatList = () => {
+  const { isPending, error, data } = useQuery({
+    queryKey: ["userChats"],
+    queryFn: () =>
+      fetch(`${import.meta.env.VITE_API_URL}/api/userchats`, {
+        credentials: "include",
+      }).then((res) => res.json()),
+  });
   return (
     <div className="chatList">
       <span className="title">DASHBOARD</span>
@@ -9,17 +23,17 @@ const ChatList = () => {
       <Link to="/">Explore Lama AI</Link>
       <Link to="/">Contact</Link>
       <hr />
+      <span className="title">RECENT CHATS</span>
       <div className="list">
-        <span className="title">RECENT CHATS</span>
-        <Link to="/dashboard/chats/1">My chat title</Link>
-        <Link to="/dashboard/chats/2">My chat title</Link>
-        <Link to="/dashboard/chats/3">My chat title</Link>
-        <Link to="/dashboard/chats/4">My chat title</Link>
-        <Link to="/dashboard/chats/5">My chat title</Link>
-        <Link to="/dashboard/chats/6">My chat title</Link>
-        <Link to="/dashboard/chats/7">My chat title</Link>
-        <Link to="/dashboard/chats/8">My chat title</Link>
-        <Link to="/dashboard/chats/9">My chat title</Link>
+        {isPending
+          ? "Loading..."
+          : error
+          ? "Something went wrong!"
+          : data?.map((chat) => (
+              <Link to={`/dashboard/chats/${chat._id}`} key={chat._id}>
+                {chat?.title ?? "Chat"}
+              </Link>
+            ))}
       </div>
       <hr />
       <div className="upgrade">
