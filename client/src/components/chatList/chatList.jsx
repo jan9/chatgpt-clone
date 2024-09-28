@@ -1,9 +1,9 @@
-import "./chartList.css";
+import "./chatList.css";
 import { Link } from "react-router-dom";
 
-const ChartList = () => {
+const ChatList = () => {
   return (
-    <div className="chartList">
+    <div className="chatList">
       <span className="title">DASHBOARD</span>
       <Link to="/dashboard">Create a new Chat</Link>
       <Link to="/">Explore Lama AI</Link>
@@ -33,4 +33,4 @@ const ChartList = () => {
   );
 };
 
-export default ChartList;
+export default ChatList;
