@@ -33,6 +33,7 @@ const NewPrompt = ({ data }) => {
   });
 
   const endRef = useRef(null);
+  const formRef = useRef(null);
 
   useEffect(() => {
     endRef.current.scrollIntoView({ behavior: "smooth" });
@@ -60,6 +61,7 @@ const NewPrompt = ({ data }) => {
       queryClient
         .invalidateQueries({ queryKey: ["chat", data._id] })
         .then(() => {
+          formRef.current.reset();
           setQuestion("");
           setAnswer("");
           setImg({ isLoading: false, error: "", dbData: {}, aiData: {} });
@@ -70,9 +72,8 @@ const NewPrompt = ({ data }) => {
     },
   });
 
-  const add = async (text, isInitial) => {
-    if (!isInitial) setQuestion(text);
-    setQuestion(text);
+  const add = async (text, isInitialQuestion) => {
+    if (!isInitialQuestion) setQuestion(text);
 
     try {
       const result = await chat.sendMessageStream(
@@ -96,8 +97,19 @@ const NewPrompt = ({ data }) => {
     const text = e.target.text.value;
     if (!text) return;
 
-    add(text);
+    add(text, false);
   };
+
+  // In production, we don't need this
+  const hasRun = useRef(false);
+  useEffect(() => {
+    if (!hasRun.current) {
+      if (data?.history?.length == 1) {
+        add(data.history[0].parts[0].text, true);
+      }
+    }
+    hasRun.curren = true;
+  }, []);
 
   return (
     <>
@@ -116,7 +128,7 @@ const NewPrompt = ({ data }) => {
         </div>
       )}
       <div className="endChat" ref={endRef}></div>
-      <form action="" className="newForm" onSubmit={handleSubmit}>
+      <form action="" className="newForm" onSubmit={handleSubmit} ref={formRef}>
         <Upload setImg={setImg} />
         <input id="file" type="file" multiple={false} hidden />
         <input type="text" name="text" placeholder="Ask about anything..." />
